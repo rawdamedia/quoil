@@ -1,1 +1,3 @@
-cli.ex
+defmodule quoil.CLI do
+  
+end

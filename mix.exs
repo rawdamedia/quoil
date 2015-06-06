@@ -29,4 +29,8 @@ defmodule Quoil.Mixfile do
   defp deps do
     []
   end
+
+  # defp escript_config do
+  #   [main_module: quoil.CLI]
+  # end
 end

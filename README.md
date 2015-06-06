@@ -5,4 +5,4 @@ QuOIL checks the quality of the internet link by logging the ping statistics to 
 
 The usage is as follows:
 
-`quoil [--interval sec]`
+`quoil [--interval min]`

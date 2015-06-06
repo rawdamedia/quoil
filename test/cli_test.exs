@@ -8,6 +8,8 @@ defmodule CliTest do
     assert parse_args(["--help", "anything"]) == :help
     assert parse_args(["-ih", "anything"]) == :help
     assert parse_args(["-hi", "anything"]) == :help
+    assert parse_args(["--help","--interval", "7", "anything"]) == :help
+    assert parse_args(["--interval", "--help", "anything"]) == :help
   end
 
   test ":help returned by an unknown option" do

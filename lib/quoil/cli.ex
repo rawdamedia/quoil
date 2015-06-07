@@ -4,7 +4,7 @@ defmodule Quoil.CLI do
   """
 
   @default_interval Application.get_env(:quoil, :default_interval)
-  require Logger
+  #require Logger
 
   def main(argv) do
     # Logger.configure level: :debug
@@ -25,11 +25,20 @@ defmodule Quoil.CLI do
       aliases:  [h: :help, i: :interval])
     # Logger.info "Parsed arguments: #{Kernel.inspect(parse)}"
     case parse do
-      { [help: true], _, _ } -> :help
-      { [interval: interval],[ ip_to_ping, log_file_name ],_ } -> { ip_to_ping, interval, log_file_name }
-      { _, [ip_to_ping, log_file_name], _} -> { ip_to_ping, @default_interval, log_file_name}
-      # { _,[ _ ], _ } -> :help
-      _ -> :help
+      { _, _, [errors]} when errors != nil -> :help
+      { switches, arguments, _ } -> process_switches(switches[:help], switches, arguments)
+      _ -> :error
+    end
+  end
+
+  defp process_switches(true, _, _) do
+    :help
+  end
+
+  defp process_switches(nil, switches, [ip_to_ping, log_file_name]) do
+    case switches[:interval] do
+      nil -> {ip_to_ping, @default_interval, log_file_name}
+      interval -> {ip_to_ping, interval, log_file_name}
     end
   end
 

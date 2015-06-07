@@ -35,23 +35,34 @@ defmodule Quoil.CLI do
     :help
   end
 
-  defp process_switches(nil, switches, [ip_to_ping, log_file_name]) do
+  defp process_switches(nil, switches, [ip_to_ping | log_file_name]) do
+    # in the future can implement logging to multiple destinations
     case switches[:interval] do
-      nil -> {ip_to_ping, @default_interval, log_file_name}
-      interval -> {ip_to_ping, interval, log_file_name}
+      nil -> rslt = {ip_to_ping, @default_interval, List.first(log_file_name)}
+      interval -> rslt = {ip_to_ping, interval, List.first(log_file_name)}
+    end
+    case rslt do
+      {ip_to_ping, interval, nil} -> {ip_to_ping, interval, :std_out}
+      _ -> rslt
     end
   end
 
   def process(:help) do
     IO.puts """
     usage: quoil [h | help]
-           issues [i | interval] <ip_to_ping> <log_file_name>
-           if interval is not specified, it defaults to #{@default_interval}
+           quoil [--interval min] <ip_to_ping> [log_file_name]
+      if interval is not specified, it defaults to #{@default_interval}
+      if log_file_name is not specified, it defaults to Standard Output
     """
     System.halt(0)
   end
 
-  def process(_) do
+  def process(:error) do
+    IO.puts "ERROR: There was an error processing command line switches."
+    System.halt(-1)
+  end
+
+  def process({ip_to_ping, interval, log_file_name}) do
     
   end
   

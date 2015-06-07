@@ -26,4 +26,8 @@ defmodule CliTest do
     assert parse_args(["--interval", "15", "ip_to_ping","log_file_name"]) == {"ip_to_ping", 15 , "log_file_name"}
     assert parse_args(["-i", "15", "ip_to_ping","log_file_name"]) == {"ip_to_ping", 15 , "log_file_name"}
   end
+
+  test "not specifying log_file_name prints to standard output" do
+    assert parse_args(["ip_to_ping"]) == {"ip_to_ping", @default_interval, :std_out}
+  end
 end

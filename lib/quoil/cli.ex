@@ -3,7 +3,10 @@ defmodule Quoil.CLI do
   Command line parsing for the quoil function
   """
 
+  # load defaults from config.exs
   @default_interval Application.get_env(:quoil, :default_interval)
+  @default_number Application.get_env(:quoil, :default_number)
+  
   #require Logger
 
   def main(argv) do
@@ -21,8 +24,8 @@ defmodule Quoil.CLI do
   """
   def parse_args(argv) do
     parse = OptionParser.parse(argv,
-      strict: [help: :boolean, interval: :integer],
-      aliases:  [h: :help, i: :interval])
+      strict: [help: :boolean, interval: :integer, number: :integer],
+      aliases:  [h: :help, i: :interval, n: :number])
     # Logger.info "Parsed arguments: #{Kernel.inspect(parse)}"
     case parse do
       { _, _, [errors]} when errors != nil -> :help
@@ -50,8 +53,11 @@ defmodule Quoil.CLI do
   def process(:help) do
     IO.puts """
     usage: quoil [h | help]
-           quoil [--interval min] <ip_to_ping> [log_file_name]
-      if interval is not specified, it defaults to #{@default_interval}
+           quoil [--interval min] [--number nr] <ip_to_ping> [log_file_name]
+      if --interval is not specified, it defaults to #{@default_interval}
+         --interval can be shortened to -i
+      if --number is not specified, it defaults to #{@default_number}
+         --number can be shortened to -n
       if log_file_name is not specified, it defaults to Standard Output
     """
     System.halt(0)

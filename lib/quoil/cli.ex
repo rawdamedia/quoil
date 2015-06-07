@@ -40,14 +40,14 @@ defmodule Quoil.CLI do
 
   defp process_switches(nil, switches, [ip_to_ping | log_file_name]) do
     # in the future can implement logging to multiple destinations
-    case switches[:interval] do
-      nil -> rslt = {ip_to_ping, @default_interval, List.first(log_file_name)}
-      interval -> rslt = {ip_to_ping, interval, List.first(log_file_name)}
+    switches = Dict.put_new(switches, :interval, @default_interval)
+    switches = Dict.put_new(switches, :number, @default_number)
+    if log_file_name == [] do
+      log_file_name = :std_out
+    else
+      log_file_name = List.first(log_file_name)
     end
-    case rslt do
-      {ip_to_ping, interval, nil} -> {ip_to_ping, interval, :std_out}
-      _ -> rslt
-    end
+    {ip_to_ping, switches, log_file_name}
   end
 
   def process(:help) do
@@ -68,7 +68,7 @@ defmodule Quoil.CLI do
     System.halt(-1)
   end
 
-  def process({ip_to_ping, interval, log_file_name}) do
+  def process({ip_to_ping, switches, log_file_name}) do
     
   end
   

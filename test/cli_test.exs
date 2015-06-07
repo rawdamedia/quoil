@@ -3,6 +3,7 @@ defmodule CliTest do
 
   import Quoil.CLI, only: [parse_args: 1]
   @default_interval Application.get_env(:quoil, :default_interval)
+  @default_number Application.get_env(:quoil, :default_number)
 
 
   test ":help returned by option parsing with -h and --help options" do
@@ -19,15 +20,16 @@ defmodule CliTest do
   end
 
   test "passing ip_to_ping and log_file_name gets processed correctly" do
-    assert parse_args(["ip_to_ping","log_file_name"]) == {"ip_to_ping", @default_interval , "log_file_name"}
+    assert parse_args(["ip_to_ping","log_file_name"]) == \
+    {"ip_to_ping", [number: @default_number, interval: @default_interval] , "log_file_name"}
   end
 
   test "allowing the interval of the pings to be specified" do
-    assert parse_args(["--interval", "15", "ip_to_ping","log_file_name"]) == {"ip_to_ping", 15 , "log_file_name"}
-    assert parse_args(["-i", "15", "ip_to_ping","log_file_name"]) == {"ip_to_ping", 15 , "log_file_name"}
+    assert parse_args(["--interval", "15", "ip_to_ping","log_file_name"]) == {"ip_to_ping", [number: @default_number, interval: 15] , "log_file_name"}
+    assert parse_args(["-i", "15", "ip_to_ping","log_file_name"]) == {"ip_to_ping", [number: @default_number, interval: 15] , "log_file_name"}
   end
 
   test "not specifying log_file_name prints to standard output" do
-    assert parse_args(["ip_to_ping"]) == {"ip_to_ping", @default_interval, :std_out}
+    assert parse_args(["ip_to_ping"]) == {"ip_to_ping", [number: @default_number, interval: @default_interval], :std_out}
   end
 end

@@ -14,6 +14,9 @@ use Mix.Config
 #       level: :info,
 #       format: "$date $time [$level] $metadata$message\n",
 #       metadata: [:user_id]
+config :quoil, 
+          default_interval: 5,
+          default_number:   20
 
 # It is also possible to import configuration files, relative to this
 # directory. For example, you can emulate configuration per environment

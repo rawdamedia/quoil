@@ -2,6 +2,8 @@ defmodule CliTest do
   use ExUnit.Case
 
   import Quoil.CLI, only: [parse_args: 1]
+  @default_interval Application.get_env(:quoil, :default_interval)
+
 
   test ":help returned by option parsing with -h and --help options" do
     assert parse_args(["-h", "anything"]) == :help
@@ -17,7 +19,7 @@ defmodule CliTest do
   end
 
   test "passing ip_to_ping and log_file_name gets processed correctly" do
-    assert parse_args(["ip_to_ping","log_file_name"]) == {"ip_to_ping", 5 , "log_file_name"}
+    assert parse_args(["ip_to_ping","log_file_name"]) == {"ip_to_ping", @default_interval , "log_file_name"}
   end
 
   test "allowing the interval of the pings to be specified" do

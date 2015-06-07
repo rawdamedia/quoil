@@ -3,7 +3,7 @@ defmodule Quoil.CLI do
   Command line parsing for the quoil function
   """
 
-  @default_interval 5
+  @default_interval Application.get_env(:quoil, :default_interval)
   require Logger
 
   def main(argv) do
@@ -21,7 +21,7 @@ defmodule Quoil.CLI do
   """
   def parse_args(argv) do
     parse = OptionParser.parse(argv,
-      switches: [help: :boolean, interval: :integer],
+      strict: [help: :boolean, interval: :integer],
       aliases:  [h: :help, i: :interval])
     # Logger.info "Parsed arguments: #{Kernel.inspect(parse)}"
     case parse do

@@ -3,8 +3,9 @@ defmodule Quoil.Mixfile do
 
   def project do
     [app: :quoil,
-     version: "0.1.1",
+     version: "0.2.0",
      elixir: "~> 1.0",
+     escript: escript_config,
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
      deps: deps]
@@ -30,7 +31,7 @@ defmodule Quoil.Mixfile do
     []
   end
 
-  # defp escript_config do
-  #   [main_module: quoil.CLI]
-  # end
+  defp escript_config do
+    [main_module: Quoil.CLI]
+  end
 end

@@ -153,6 +153,20 @@ defmodule Quoil.CLI do
   def log_writer(log_file_name) do
     # Return a function that will append appropriately formatted text to a file.
     # If the file doesn't exist, it needs to be created and a header row inserted first.
+    fn (data) ->
+      unless File.exists?(log_file_name) do
+        #create the file and add the header row
+        header = "\"TimeStamp\"\t\"TargetURL\"\t\"TargetIP\"\t\"Sent\"\t\"Rcvd\"\t\"Loss\"\t\"Min\"\t\"Avg\"\t\"Max\"\t\"SD\""
+        File.open(log_file_name, [:append, :utf8], fn(file) ->
+          IO.puts(file, header)
+        end)
+      end
+      #write the subsequent row of data
+      data_line = "\"#{get_timestamp()}\"\t\"#{data.targetURL}\"\t\"#{data.targetIP}\"\t\"#{data.sent}\"\t\"#{data.received}\"\t\"#{data.loss}\"\t\"#{data.min}\"\t\"#{data.avg}\"\t\"#{data.max}\"\t\"#{data.stddev}\""
+      File.open(log_file_name, [:append, :utf8], fn(file) ->
+          IO.puts(file, data_line)
+      end)
+    end
   end
   
   @doc"""

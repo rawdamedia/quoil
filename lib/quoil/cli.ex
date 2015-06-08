@@ -53,20 +53,17 @@ defmodule Quoil.CLI do
 
   def process(:help) do
     IO.puts """
-    usage: quoil [h | help]
-           quoil [--interval min] [--number nr] <ip_to_ping> [log_file_name]
-      if --interval is not specified, it defaults to #{@default_interval}
-         --interval can be shortened to -i
-      if --number is not specified, it defaults to #{@default_number}
-         --number can be shortened to -n
-      if log_file_name is not specified, it defaults to Standard Output
+    usage: quoil [-h | --help]
+           quoil [--interval sec] [--number nr] <ip_to_ping> [log_file_name]
+    
+    For more information see: https://github.com/rawdamedia/quoil
     """
     System.halt(0)
   end
 
   def process(:error) do
     IO.puts "ERROR: There was an error processing command line switches."
-    System.halt(-1)
+    System.halt(:abort)
   end
 
   def process({ip_to_ping, switches, log_file_name}) do

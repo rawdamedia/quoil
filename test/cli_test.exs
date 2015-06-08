@@ -47,5 +47,5 @@ defmodule CliTest do
   test "specifying both number and interval still works" do
     assert parse_args(["--interval", "23", "--number", "45", "ip_to_ping", "log_file_name"]) === {"ip_to_ping", make_switches(23, 45) , "log_file_name"}
     assert parse_args(["--number", "45", "--interval", "23", "ip_to_ping", "log_file_name"]) === {"ip_to_ping", make_switches(23, 45) , "log_file_name"}
-  end     
+  end
 end

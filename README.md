@@ -5,7 +5,7 @@ QuOIL checks the quality of the internet link by logging the ping statistics to 
 
 The usage is as follows:
 
-`quoil [h | help]`
+`quoil [-h | --help]`
 
 * This prints a summary of the usage.
 

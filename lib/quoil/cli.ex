@@ -18,9 +18,14 @@ defmodule Quoil.CLI do
   end
  
   @doc """
-  `argv` can be -h or --help, which returns :help.
-  An optional polling interval (in minutes) can be specified
-  Return a tuple of `{ip_to_ping, interval, log_file_name}`, or `:help` if help was given.
+  *argv* can be -h or --help, which returns :help.  
+  Optional switches can be specified:  
+  - *\-\-interval* or *-i* to set the interval in seconds between pings
+  - *\-\-number* or *-n* to set the number of pings in each run  
+  Need to specify the *ip_to_ping* as an IP address or URL.  
+  If *log_file_name* is not specified, it defaults to *:std_out*  
+  
+  Return a tuple of `{ip_to_ping, %{switches}, log_file_name}`, or `:help` if help was given.
   """
   def parse_args(argv) do
     parse = OptionParser.parse(argv,

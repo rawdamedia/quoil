@@ -1,7 +1,8 @@
 defmodule CliTest do
   use ExUnit.Case
 
-  import Quoil.CLI, only: [parse_args: 1]
+  import Quoil.CLI, only: [parse_args: 1, run_ping: 1]
+
   @default_interval Application.get_env(:quoil, :default_interval)
   @default_number Application.get_env(:quoil, :default_number)
 
@@ -11,6 +12,8 @@ defmodule CliTest do
     switches = Map.put(switches, :number, number)
     switches
   end
+
+  # Testing parse_args function
 
   test ":help returned by option parsing with -h and --help options" do
     assert parse_args(["-h", "anything"]) == :help
@@ -47,5 +50,12 @@ defmodule CliTest do
   test "specifying both number and interval still works" do
     assert parse_args(["--interval", "23", "--number", "45", "ip_to_ping", "log_file_name"]) === {"ip_to_ping", make_switches(23, 45) , "log_file_name"}
     assert parse_args(["--number", "45", "--interval", "23", "ip_to_ping", "log_file_name"]) === {"ip_to_ping", make_switches(23, 45) , "log_file_name"}
+  end
+
+  # Testing process function
+
+  test "able to run ping function" do
+    {test_data, _} = run_ping(parse_args(["-i","1","-n","3","google.com"]))
+    assert String.starts_with?(test_data, "PING") && String.contains?(test_data, "google.com")
   end
 end

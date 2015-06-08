@@ -14,7 +14,9 @@ defmodule Quoil.CLI do
 
     argv
     |> parse_args
-    |> process
+    |> run_ping
+    |> parse_result
+    |> write_log
   end
  
   @doc """
@@ -24,7 +26,7 @@ defmodule Quoil.CLI do
   - *\-\-number* or *-n* to set the number of pings in each run  
   Need to specify the *ip_to_ping* as an IP address or URL.  
   If *log_file_name* is not specified, it defaults to *:std_out*  
-  
+
   Return a tuple of `{ip_to_ping, %{switches}, log_file_name}`, or `:help` if help was given.
   """
   def parse_args(argv) do
@@ -43,6 +45,13 @@ defmodule Quoil.CLI do
     :help
   end
 
+  @doc"""
+  Makes sure that if --help|-h is included anywhere then all other options are ignored and help is printed.  
+  Returns a data tuple of `{*ip_to_ping*, *switches*, *log_file_name*}` where:  
+  - *ip_to_ping* is a String of either the URL or IP to be supplied to the `ping` command.
+  - *switches* is a map containing all the values (default or supplied) for the options to be passed to the ping command.
+  - *log_file_name* is **:std_out** or the path to the file to save the results to. 
+  """
   defp process_switches(nil, switches, [ip_to_ping | log_file_name]) do
     # in the future can implement logging to multiple destinations
     switches = Map.put_new(switches, :interval, @default_interval)
@@ -56,7 +65,7 @@ defmodule Quoil.CLI do
     {ip_to_ping, switches, log_file_name}
   end
 
-  def process(:help) do
+  def run_ping(:help) do
     IO.puts """
     usage: quoil [-h | --help]
            quoil [--interval sec] [--number nr] <ip_to_ping> [log_file_name]
@@ -66,13 +75,30 @@ defmodule Quoil.CLI do
     System.halt(0)
   end
 
-  def process(:error) do
-    IO.puts "ERROR: There was an error processing command line switches."
+  def run_ping(:error) do
+    IO.puts "ERROR: There was an error with the command line switches."
     System.halt(:abort)
   end
 
-  def process({ip_to_ping, switches, log_file_name}) do
-    
+  @doc"""
+  Runs the System `ping` command.  
+  Uses *ip_to_ping* and *switches* to appropriately format the `ping` command-line options.  
+  Returns a tuple `{result, switches, log_file_name}` where:
+  - *result* is the raw result of running the `ping` command.
+  - *switches* is the unmodified map containing all the switches.
+  - *log_file_name* is passed along unmodified.
+  """
+  def run_ping({ip_to_ping, switches, log_file_name}) do
+    args = ["-q", "-c", to_string(switches[:number]), "-W", to_string(switches[:interval]), ip_to_ping]
+    {rslt, exit_code} = System.cmd("ping", args)
+    if exit_code != 0 do
+      IO.puts "ERROR: The ping command exited with code: #{exit_code}"
+      IO.puts rslt
+      System.halt(:abort)
+    end
+    {rslt, switches, log_file_name}
+  end
+  
   end
   
 

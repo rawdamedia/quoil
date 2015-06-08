@@ -109,7 +109,9 @@ defmodule CliTest do
     assert parsed_rslt.avg  == "50.580"
     assert parsed_rslt.max  == "55.803"
     assert parsed_rslt.stddev == "2.043"
-
   end
 
+  test "write_log to console" do
+    assert write_log(parse_result({@test_ping1, %{}, :std_out})) == :ok
+  end
 end

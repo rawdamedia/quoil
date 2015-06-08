@@ -135,15 +135,18 @@ defmodule Quoil.CLI do
   
   def write_log({parsed_rslt, switches, log_file_name}) do
     log_data = log_writer(log_file_name)
+    log_data.(parsed_rslt)
   end
 
 
   def log_writer(:std_out) do
     # Return a function that will output appropriately formatted text to the screen
     fn (data) ->
-      IO.puts "PING statistics from #{get_timestamp()}"
+      IO.puts "\nPING statistics from #{get_timestamp()}"
       IO.puts "========================================\n"
       IO.puts "The target was: #{data.targetURL} (#{data.targetIP})."
+      IO.puts "packets sent = #{data.sent} -> received = #{data.received} => #{data.loss}% lost."
+      IO.puts "round-trip statistics: avg = #{data.avg}ms; stddev = #{data.stddev}ms; range = #{data.min}-#{data.max}ms"
     end
   end
 
@@ -157,9 +160,9 @@ defmodule Quoil.CLI do
   *yyyy-MM-dd hh:mm:ss*
   """
   def get_timestamp() do
+    pad = fn nr -> nr |> to_string |> String.rjust(2,?0) end
     {{yr,mo,dy}, {hr,mi,se}} = :calendar.local_time()
-    "#{yr}-#{mo}-#{dy} #{hr}:#{mi}:#{se}"
+    "#{yr}-#{pad.(mo)}-#{pad.(dy)} #{pad.(hr)}:#{pad.(mi)}:#{pad.(se)}"
   end
-  
 
 end

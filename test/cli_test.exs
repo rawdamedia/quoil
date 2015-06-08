@@ -1,10 +1,12 @@
 defmodule CliTest do
   use ExUnit.Case
 
-  import Quoil.CLI, only: [parse_args: 1, run_ping: 1]
+  import Quoil.CLI
 
   @default_interval Application.get_env(:quoil, :default_interval)
   @default_number Application.get_env(:quoil, :default_number)
+  @test_ping1 "PING google.com (216.58.220.110): 56 data bytes\n\n--- google.com ping statistics ---\n5 packets transmitted, 5 packets received, 0.0% packet loss\nround-trip min/avg/max/stddev = 51.321/53.851/55.948/1.647 ms\n"
+  @test_ping2 "PING 8.8.4.4 (8.8.4.4): 56 data bytes\n\n--- 8.8.4.4 ping statistics ---\n7 packets transmitted, 7 packets received, 0.0% packet loss\nround-trip min/avg/max/stddev = 51.109/55.723/59.160/2.592 ms\n"
 
   defp make_switches(interval, number) do
     switches = Map.new()
@@ -52,10 +54,22 @@ defmodule CliTest do
     assert parse_args(["--number", "45", "--interval", "23", "ip_to_ping", "log_file_name"]) === {"ip_to_ping", make_switches(23, 45) , "log_file_name"}
   end
 
-  # Testing process function
+  # Testing run_ping function
 
   test "able to run ping function" do
-    {test_data, _} = run_ping(parse_args(["-i","1","-n","3","google.com"]))
+    {test_data, _, _} = run_ping(parse_args(["-i","1","-n","3","google.com"]))
     assert String.starts_with?(test_data, "PING") && String.contains?(test_data, "google.com")
   end
+
+  # test parse_results
+
+  test "parse_results able to extract the target URL and IP address" do
+    {parsed_rslt, _ , _} = parse_result({@test_ping1, %{}, ""})
+    assert parsed_rslt.targetURL == "google.com"
+    assert parsed_rslt.targetIP  == "216.58.220.110"
+    {parsed_rslt, _ , _} = parse_result({@test_ping2, %{}, ""})
+    assert parsed_rslt.targetURL == "8.8.4.4"
+    assert parsed_rslt.targetIP  == "8.8.4.4"
+  end
+
 end

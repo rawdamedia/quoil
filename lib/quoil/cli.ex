@@ -1,7 +1,10 @@
 defmodule Quoil.CLI do
   @moduledoc """
-  Command line parsing for the quoil function
-  """
+  Command line parsing for the quoil function  
+    -> running the ping command  
+    -> interpreting the results  
+    -> logging
+    """
 
   # load defaults from config.exs
   @default_interval Application.get_env(:quoil, :default_interval)
@@ -17,8 +20,9 @@ defmodule Quoil.CLI do
     |> run_ping
     |> parse_result
     |> write_log
+
   end
- 
+
   @doc """
   *argv* can be -h or --help, which returns :help.  
   Optional switches can be specified:  
@@ -41,7 +45,7 @@ defmodule Quoil.CLI do
     end
   end
 
-  defp process_switches(true, _, _) do
+  def process_switches(true, _, _) do
     :help
   end
 
@@ -52,7 +56,7 @@ defmodule Quoil.CLI do
   - *switches* is a map containing all the values (default or supplied) for the options to be passed to the ping command.
   - *log_file_name* is **:std_out** or the path to the file to save the results to. 
   """
-  defp process_switches(nil, switches, [ip_to_ping | log_file_name]) do
+  def process_switches(nil, switches, [ip_to_ping | log_file_name]) do
     # in the future can implement logging to multiple destinations
     switches = Map.put_new(switches, :interval, @default_interval)
     switches = Map.put_new(switches, :number, @default_number)
@@ -68,7 +72,7 @@ defmodule Quoil.CLI do
   def run_ping(:help) do
     IO.puts """
     usage: quoil [-h | --help]
-           quoil [--interval sec] [--number nr] <ip_to_ping> [log_file_name]
+    quoil [--interval sec] [--number nr] <ip_to_ping> [log_file_name]
     
     For more information see: https://github.com/rawdamedia/quoil
     """
@@ -100,10 +104,22 @@ defmodule Quoil.CLI do
   end
   
   def parse_result({rslt, switches, log_file_name}) do
+    parsed_rslt = Map.new()
+    # Extract targetURL
+    regex = ~r/\APING\s(.*)\s/r
+    parsed_rslt = Map.put(parsed_rslt, :targetURL, Regex.run(regex, rslt)|>List.last)
+
+    # Extract targetIP
+    regex = ~r/\s[(](.*)[)]/r
+    parsed_rslt = Map.put(parsed_rslt, :targetIP, Regex.run(regex, rslt)|>List.last)
+
+    {parsed_rslt, switches, log_file_name}
+  end
+  
+  def write_log({parsed_rslt, switches, log_file_name}) do
     log_data = log_writer(log_file_name)
 
   end
-  
 
 
   def log_writer(:std_out) do
@@ -112,8 +128,9 @@ defmodule Quoil.CLI do
       IO.puts "PING statistics from #{get_timestamp()}"
       IO.puts "========================================\n"
       IO.puts "The target was: #{data.targetURL} (#{data.targetIP})."
+    end
   end
-  
+
   def log_writer(log_file_name) do
     # Return a function that will append appropriately formatted text to a file.
     # If the file doesn't exist, it needs to be created and a header row inserted first.

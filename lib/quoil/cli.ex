@@ -125,12 +125,16 @@ defmodule Quoil.CLI do
     regex = ~r{\b(\d+[.]\d+)[%] packet loss\b}r
     parsed_rslt = Map.put(parsed_rslt, :loss, Regex.run(regex, rslt) |> List.last)
 
+    # Extract stats
+    regex = ~r{(\d+[.]\d+[/]\d+[.]\d+[/]\d+[.]\d+[/]\d+[.]\d+)\sms\Z}r
+    [min, avg, max, stddev] = Regex.run(regex, rslt) |> List.last |> String.split("/")
+    parsed_rslt = %{min: min, avg: avg, max: max, stddev: stddev} |> Map.merge(parsed_rslt)
+
     {parsed_rslt, switches, log_file_name}
   end
   
   def write_log({parsed_rslt, switches, log_file_name}) do
     log_data = log_writer(log_file_name)
-
   end
 
 

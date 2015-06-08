@@ -94,6 +94,21 @@ defmodule CliTest do
   end
 
   test "parse_result able to extract the packet round-trip statistics" do 
+    {parsed_rslt, _ , _} = parse_result({@test_ping1, %{}, ""})
+    assert parsed_rslt.min == "51.321"
+    assert parsed_rslt.avg  == "53.851"
+    assert parsed_rslt.max  == "55.948"
+    assert parsed_rslt.stddev == "1.647"
+    {parsed_rslt, _ , _} = parse_result({@test_ping2, %{}, ""})
+    assert parsed_rslt.min == "51.109"
+    assert parsed_rslt.avg  == "55.723"
+    assert parsed_rslt.max  == "59.160"
+    assert parsed_rslt.stddev == "2.592"
+    {parsed_rslt, _ , _} = parse_result({@test_ping3, %{}, ""})
+    assert parsed_rslt.min == "48.489"
+    assert parsed_rslt.avg  == "50.580"
+    assert parsed_rslt.max  == "55.803"
+    assert parsed_rslt.stddev == "2.043"
 
   end
 

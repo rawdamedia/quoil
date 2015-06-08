@@ -99,6 +99,33 @@ defmodule Quoil.CLI do
     {rslt, switches, log_file_name}
   end
   
+  def parse_result({rslt, switches, log_file_name}) do
+    log_data = log_writer(log_file_name)
+
+  end
+  
+
+
+  def log_writer(:std_out) do
+    # Return a function that will output appropriately formatted text to the screen
+    fn (data) ->
+      IO.puts "PING statistics from #{get_timestamp()}"
+      IO.puts "========================================\n"
+      IO.puts "The target was: #{data.targetURL} (#{data.targetIP})."
+  end
+  
+  def log_writer(log_file_name) do
+    # Return a function that will append appropriately formatted text to a file.
+    # If the file doesn't exist, it needs to be created and a header row inserted first.
+  end
+  
+  @doc"""
+  Returns the current local date and time as a string in the format:
+  *yyyy-MM-dd hh:mm:ss*
+  """
+  def get_timestamp() do
+    {{yr,mo,dy}, {hr,mi,se}} = :calendar.local_time()
+    "#{yr}-#{mo}-#{dy} #{hr}:#{mi}:#{se}"
   end
   
 

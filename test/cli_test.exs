@@ -5,6 +5,12 @@ defmodule CliTest do
   @default_interval Application.get_env(:quoil, :default_interval)
   @default_number Application.get_env(:quoil, :default_number)
 
+  defp make_switches(interval, number) do
+    switches = Map.new()
+    switches = Map.put(switches, :interval, interval)
+    switches = Map.put(switches, :number, number)
+    switches
+  end
 
   test ":help returned by option parsing with -h and --help options" do
     assert parse_args(["-h", "anything"]) == :help
@@ -21,15 +27,20 @@ defmodule CliTest do
 
   test "passing ip_to_ping and log_file_name gets processed correctly" do
     assert parse_args(["ip_to_ping","log_file_name"]) == \
-    {"ip_to_ping", [number: @default_number, interval: @default_interval] , "log_file_name"}
+    {"ip_to_ping", make_switches(@default_interval, @default_number) , "log_file_name"}
   end
 
   test "allowing the interval of the pings to be specified" do
-    assert parse_args(["--interval", "15", "ip_to_ping","log_file_name"]) == {"ip_to_ping", [number: @default_number, interval: 15] , "log_file_name"}
-    assert parse_args(["-i", "15", "ip_to_ping","log_file_name"]) == {"ip_to_ping", [number: @default_number, interval: 15] , "log_file_name"}
+    assert parse_args(["--interval", "15", "ip_to_ping","log_file_name"]) == {"ip_to_ping", make_switches(15, @default_number) , "log_file_name"}
+    assert parse_args(["-i", "15", "ip_to_ping","log_file_name"]) == {"ip_to_ping", make_switches(15, @default_number) , "log_file_name"}
   end
 
   test "not specifying log_file_name prints to standard output" do
-    assert parse_args(["ip_to_ping"]) == {"ip_to_ping", [number: @default_number, interval: @default_interval], :std_out}
+    assert parse_args(["ip_to_ping"]) == {"ip_to_ping", make_switches(@default_interval, @default_number), :std_out}
+  end
+
+  test "allowing the number of pings in each group to be specified" do
+    assert parse_args(["-n", "25", "ip_to_ping", "log_file_name"]) === {"ip_to_ping", make_switches(@default_interval, 25) , "log_file_name"}
+    assert parse_args(["--number", "25", "ip_to_ping", "log_file_name"]) === {"ip_to_ping", make_switches(@default_interval, 25) , "log_file_name"}
   end
 end

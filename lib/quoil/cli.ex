@@ -29,7 +29,7 @@ defmodule Quoil.CLI do
     # Logger.info "Parsed arguments: #{Kernel.inspect(parse)}"
     case parse do
       { _, _, [errors]} when errors != nil -> :help
-      { switches, arguments, _ } -> process_switches(switches[:help], switches, arguments)
+      { switches, arguments, _ } -> process_switches(switches[:help], Enum.into(switches, %{}), arguments)
       _ -> :error
     end
   end
@@ -40,12 +40,13 @@ defmodule Quoil.CLI do
 
   defp process_switches(nil, switches, [ip_to_ping | log_file_name]) do
     # in the future can implement logging to multiple destinations
-    switches = Dict.put_new(switches, :interval, @default_interval)
-    switches = Dict.put_new(switches, :number, @default_number)
+    switches = Map.put_new(switches, :interval, @default_interval)
+    switches = Map.put_new(switches, :number, @default_number)
     if log_file_name == [] do
       log_file_name = :std_out
     else
       log_file_name = List.first(log_file_name)
+      # NB this will ignore all non-switches after log_file_name to be ignored
     end
     {ip_to_ping, switches, log_file_name}
   end

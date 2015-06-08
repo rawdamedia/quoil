@@ -106,12 +106,24 @@ defmodule Quoil.CLI do
   def parse_result({rslt, switches, log_file_name}) do
     parsed_rslt = Map.new()
     # Extract targetURL
-    regex = ~r/\APING\s(.*)\s/r
-    parsed_rslt = Map.put(parsed_rslt, :targetURL, Regex.run(regex, rslt)|>List.last)
+    regex = ~r{\APING\s(.*)\s}r
+    parsed_rslt = Map.put(parsed_rslt, :targetURL, Regex.run(regex, rslt) |> List.last)
 
     # Extract targetIP
-    regex = ~r/\s[(](.*)[)]/r
-    parsed_rslt = Map.put(parsed_rslt, :targetIP, Regex.run(regex, rslt)|>List.last)
+    regex = ~r{\s[(](.*)[)]}r
+    parsed_rslt = Map.put(parsed_rslt, :targetIP, Regex.run(regex, rslt) |> List.last)
+
+    # Extract sent
+    regex = ~r{\b(\d+) packets transmitted\b}r
+    parsed_rslt = Map.put(parsed_rslt, :sent, Regex.run(regex, rslt) |> List.last)
+
+    # Extract received
+    regex = ~r{\b(\d+) packets received\b}r
+    parsed_rslt = Map.put(parsed_rslt, :received, Regex.run(regex, rslt) |> List.last)
+
+    # Extract loss
+    regex = ~r{\b(\d+[.]\d+)[%] packet loss\b}r
+    parsed_rslt = Map.put(parsed_rslt, :loss, Regex.run(regex, rslt) |> List.last)
 
     {parsed_rslt, switches, log_file_name}
   end

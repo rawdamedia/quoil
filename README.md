@@ -19,3 +19,4 @@ The usage is as follows:
 
 * If *log_file_name* is not specified, it defaults to Standard Output.
     If *log_file_name* is specified as an absolute or relative path, and it does not exist, then it will be created as a tab-delimited log file.
+

@@ -2,60 +2,14 @@ defmodule CliTest do
   use ExUnit.Case
 
   import Quoil.CLI
+  import Quoil.ArgsProcessor, only: [parse_args: 1]
 
   @tag timeout: 10000000
 
-  @default_interval Application.get_env(:quoil, :default_interval)
-  @default_number Application.get_env(:quoil, :default_number)
+  
   @test_ping1 "PING google.com (216.58.220.110): 56 data bytes\n\n--- google.com ping statistics ---\n5 packets transmitted, 5 packets received, 0.0% packet loss\nround-trip min/avg/max/stddev = 51.321/53.851/55.948/1.647 ms\n"
   @test_ping2 "PING 8.8.4.4 (8.8.4.4): 56 data bytes\n\n--- 8.8.4.4 ping statistics ---\n7 packets transmitted, 7 packets received, 0.0% packet loss\nround-trip min/avg/max/stddev = 51.109/55.723/59.160/2.592 ms\n"
   @test_ping3 "PING google.com.au (216.58.220.99): 56 data bytes\n\n--- google.com.au ping statistics ---\n15 packets transmitted, 14 packets received, 6.7% packet loss\nround-trip min/avg/max/stddev = 48.489/50.580/55.803/2.043 ms\n"
-
-  defp make_switches(interval, number) do
-    switches = Map.new()
-    switches = Map.put(switches, :interval, interval)
-    switches = Map.put(switches, :number, number)
-    switches
-  end
-
-  # Testing parse_args function
-
-  test ":help returned by option parsing with -h and --help options" do
-    assert parse_args(["-h", "anything"]) == :help
-    assert parse_args(["--help", "anything"]) == :help
-    assert parse_args(["-ih", "anything"]) == :help
-    assert parse_args(["-hi", "anything"]) == :help
-    assert parse_args(["--help","--interval", "7", "anything"]) == :help
-    assert parse_args(["--interval", "--help", "anything"]) == :help
-  end
-
-  test ":help returned by an unknown option" do
-    assert parse_args(["--unknown", "anything"]) == :help
-  end
-
-  test "passing ip_to_ping and log_file_name gets processed correctly" do
-    assert parse_args(["ip_to_ping","log_file_name"]) == \
-    {"ip_to_ping", make_switches(@default_interval, @default_number) , "log_file_name"}
-  end
-
-  test "allowing the interval of the pings to be specified" do
-    assert parse_args(["--interval", "15", "ip_to_ping","log_file_name"]) == {"ip_to_ping", make_switches(15, @default_number) , "log_file_name"}
-    assert parse_args(["-i", "15", "ip_to_ping","log_file_name"]) == {"ip_to_ping", make_switches(15, @default_number) , "log_file_name"}
-  end
-
-  test "not specifying log_file_name prints to standard output" do
-    assert parse_args(["ip_to_ping"]) == {"ip_to_ping", make_switches(@default_interval, @default_number), :std_out}
-  end
-
-  test "allowing the number of pings in each group to be specified" do
-    assert parse_args(["-n", "25", "ip_to_ping", "log_file_name"]) === {"ip_to_ping", make_switches(@default_interval, 25) , "log_file_name"}
-    assert parse_args(["--number", "25", "ip_to_ping", "log_file_name"]) === {"ip_to_ping", make_switches(@default_interval, 25) , "log_file_name"}
-  end
-
-  test "specifying both number and interval still works" do
-    assert parse_args(["--interval", "23", "--number", "45", "ip_to_ping", "log_file_name"]) === {"ip_to_ping", make_switches(23, 45) , "log_file_name"}
-    assert parse_args(["--number", "45", "--interval", "23", "ip_to_ping", "log_file_name"]) === {"ip_to_ping", make_switches(23, 45) , "log_file_name"}
-  end
 
   # Testing run_ping function
 

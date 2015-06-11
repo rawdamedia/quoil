@@ -1,15 +1,13 @@
 defmodule Quoil.CLI do
   @moduledoc """
-  Command line parsing for the quoil function  
+  Command line interface for the quoil function  
+    -> parsing the arguments
     -> running the ping command  
     -> interpreting the results  
     -> logging
     """
 
-  # load defaults from config.exs
-  @default_interval Application.get_env(:quoil, :default_interval)
-  @default_number Application.get_env(:quoil, :default_number)
-  
+  import Quoil.ArgsProcessor, only: [parse_args: 1]
   #require Logger
 
   def main(argv) do
@@ -17,59 +15,15 @@ defmodule Quoil.CLI do
 
     argv
     |> parse_args
+    |> terminate_early?
     |> run_ping
     |> parse_result
     |> write_log
 
   end
 
-  @doc """
-  *argv* can be -h or --help, which returns :help.  
-  Optional switches can be specified:  
-  - *\-\-interval* or *-i* to set the interval in seconds between pings
-  - *\-\-number* or *-n* to set the number of pings in each run  
-  Need to specify the *ip_to_ping* as an IP address or URL.  
-  If *log_file_name* is not specified, it defaults to *:std_out*  
 
-  Return a tuple of `{ip_to_ping, %{switches}, log_file_name}`, or `:help` if help was given.
-  """
-  def parse_args(argv) do
-    parse = OptionParser.parse(argv,
-      strict: [help: :boolean, interval: :integer, number: :integer],
-      aliases:  [h: :help, i: :interval, n: :number])
-    # Logger.info "Parsed arguments: #{Kernel.inspect(parse)}"
-    case parse do
-      { _, _, [errors]} when errors != nil -> :help
-      { switches, arguments, _ } -> process_switches(switches[:help], Enum.into(switches, %{}), arguments)
-      _ -> :error
-    end
-  end
-
-  def process_switches(true, _, _) do
-    :help
-  end
-
-  @doc"""
-  Makes sure that if --help|-h is included anywhere then all other options are ignored and help is printed.  
-  Returns a data tuple of `{*ip_to_ping*, *switches*, *log_file_name*}` where:  
-  - *ip_to_ping* is a String of either the URL or IP to be supplied to the `ping` command.
-  - *switches* is a map containing all the values (default or supplied) for the options to be passed to the ping command.
-  - *log_file_name* is **:std_out** or the path to the file to save the results to. 
-  """
-  def process_switches(nil, switches, [ip_to_ping | log_file_name]) do
-    # in the future can implement logging to multiple destinations
-    switches = Map.put_new(switches, :interval, @default_interval)
-    switches = Map.put_new(switches, :number, @default_number)
-    if log_file_name == [] do
-      log_file_name = :std_out
-    else
-      log_file_name = List.first(log_file_name)
-      # NB this will ignore all non-switches after log_file_name to be ignored
-    end
-    {ip_to_ping, switches, log_file_name}
-  end
-
-  def run_ping(:help) do
+  def terminate_early?(:help) do
     IO.puts """
     usage: quoil [-h | --help]
     quoil [--interval sec] [--number nr] <ip_to_ping> [log_file_name]
@@ -78,11 +32,14 @@ defmodule Quoil.CLI do
     """
     System.halt(0)
   end
-
-  def run_ping(:error) do
+  def terminate_early?(:error) do
     IO.puts "ERROR: There was an error with the command line switches."
     System.halt(:abort)
   end
+  def terminate_early?(switches) do
+    switches
+  end
+  
 
   @doc"""
   Runs the System `ping` command.  

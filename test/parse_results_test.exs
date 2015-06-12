@@ -1,24 +1,11 @@
-defmodule CliTest do
+defmodule ParseResultsTest do
   use ExUnit.Case
 
-  import Quoil.CLI
-  import Quoil.ArgsProcessor, only: [parse_args: 1]
+  import Quoil.ParseResults, only: [parse_result: 1]
 
-  @tag timeout: 10000000
-
-  
   @test_ping1 "PING google.com (216.58.220.110): 56 data bytes\n\n--- google.com ping statistics ---\n5 packets transmitted, 5 packets received, 0.0% packet loss\nround-trip min/avg/max/stddev = 51.321/53.851/55.948/1.647 ms\n"
   @test_ping2 "PING 8.8.4.4 (8.8.4.4): 56 data bytes\n\n--- 8.8.4.4 ping statistics ---\n7 packets transmitted, 7 packets received, 0.0% packet loss\nround-trip min/avg/max/stddev = 51.109/55.723/59.160/2.592 ms\n"
   @test_ping3 "PING google.com.au (216.58.220.99): 56 data bytes\n\n--- google.com.au ping statistics ---\n15 packets transmitted, 14 packets received, 6.7% packet loss\nround-trip min/avg/max/stddev = 48.489/50.580/55.803/2.043 ms\n"
-
-  # Testing run_ping function
-
-  test "able to run ping function" do
-    {test_data, _, _} = run_ping(parse_args(["-i","1","-n","3","google.com"]))
-    assert String.starts_with?(test_data, "PING") && String.contains?(test_data, "google.com")
-  end
-
-  # test parse_results
 
   test "parse_results able to extract the target URL and IP address" do
     {parsed_rslt, _ , _} = parse_result({@test_ping1, %{}, ""})
@@ -64,4 +51,5 @@ defmodule CliTest do
     assert parsed_rslt.max  == "55.803"
     assert parsed_rslt.stddev == "2.043"
   end
+
 end

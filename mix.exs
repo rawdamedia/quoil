@@ -3,7 +3,7 @@ defmodule Quoil.Mixfile do
 
   def project do
     [app: :quoil,
-     version: "0.2.1",
+     version: "0.2.2",
      elixir: "~> 1.0",
      escript: escript_config,
      build_embedded: Mix.env == :prod,

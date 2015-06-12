@@ -7,16 +7,16 @@ defmodule Quoil.CLI do
     -> logging
     """
 
-  import Quoil.ArgsProcessor, only: [parse_args: 1]
+  # import Quoil.ArgsProcessor, only: [parse_args: 1]
   import Quoil.LogResults, only: [write_log: 1]
-  
+
   #require Logger
 
   def main(argv) do
     # Logger.configure level: :debug
 
     argv
-    |> parse_args
+    |> Quoil.ArgsProcessor.parse_args
     |> terminate_early?
     |> run_ping
     |> parse_result
@@ -63,26 +63,15 @@ defmodule Quoil.CLI do
   end
   
   def parse_result({rslt, switches, log_file_name}) do
-    parsed_rslt = Map.new()
-    # Extract targetURL
-    regex = ~r{\APING\s(.*)\s}r
-    parsed_rslt = Map.put(parsed_rslt, :targetURL, Regex.run(regex, rslt) |> List.last)
+    regexes = %{
+      targetURL: ~r{\APING\s(.*)\s}r,
+      targetIP:  ~r{\s[(](.*)[)]}r,
+      sent:      ~r{\b(\d+) packets transmitted\b}r,
+      received:  ~r{\b(\d+) packets received\b}r,
+      loss:      ~r{\b(\d+[.]\d+)[%] packet loss\b}r
+    }
 
-    # Extract targetIP
-    regex = ~r{\s[(](.*)[)]}r
-    parsed_rslt = Map.put(parsed_rslt, :targetIP, Regex.run(regex, rslt) |> List.last)
-
-    # Extract sent
-    regex = ~r{\b(\d+) packets transmitted\b}r
-    parsed_rslt = Map.put(parsed_rslt, :sent, Regex.run(regex, rslt) |> List.last)
-
-    # Extract received
-    regex = ~r{\b(\d+) packets received\b}r
-    parsed_rslt = Map.put(parsed_rslt, :received, Regex.run(regex, rslt) |> List.last)
-
-    # Extract loss
-    regex = ~r{\b(\d+[.]\d+)[%] packet loss\b}r
-    parsed_rslt = Map.put(parsed_rslt, :loss, Regex.run(regex, rslt) |> List.last)
+    parsed_rslt = Enum.reduce(regexes, %{}, fn({key,val}, rslt_map) -> Map.put(rslt_map, key, (Regex.run(val, rslt) |> List.last))  end)
 
     # Extract stats
     regex = ~r{(\d+[.]\d+[/]\d+[.]\d+[/]\d+[.]\d+[/]\d+[.]\d+)\sms\Z}r

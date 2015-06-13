@@ -16,7 +16,8 @@ use Mix.Config
 #       metadata: [:user_id]
 config :quoil, 
           default_interval: 3,
-          default_number:   20
+          default_number:   20,
+          wait_period:      60
 
 # It is also possible to import configuration files, relative to this
 # directory. For example, you can emulate configuration per environment

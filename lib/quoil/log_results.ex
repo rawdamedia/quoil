@@ -1,8 +1,9 @@
 defmodule Quoil.LogResults do
   
-  def write_log({parsed_rslt, _, log_file_name}) do
+  def write_log({parsed_rslt, ip_pinged, switches, log_file_name}) do
     log_data = log_writer(log_file_name)
     log_data.(parsed_rslt)
+    {ip_pinged, switches, log_file_name}
   end
 
 

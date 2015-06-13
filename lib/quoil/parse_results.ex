@@ -1,6 +1,6 @@
 defmodule Quoil.ParseResults do
   
-    def parse_result({rslt, switches, log_file_name}) do
+    def parse_result({rslt, ip_pinged, switches, log_file_name}) do
     regexes = %{
       targetURL: ~r{\APING\s(.*)\s}r,
       targetIP:  ~r{\s[(](.*)[)]}r,
@@ -16,7 +16,7 @@ defmodule Quoil.ParseResults do
     [min, avg, max, stddev] = Regex.run(regex, rslt) |> List.last |> String.split("/")
     parsed_rslt = %{min: min, avg: avg, max: max, stddev: stddev} |> Map.merge(parsed_rslt)
 
-    {parsed_rslt, switches, log_file_name}
+    {parsed_rslt, ip_pinged, switches, log_file_name}
   end
   
 end

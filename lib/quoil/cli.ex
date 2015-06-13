@@ -52,7 +52,7 @@ defmodule Quoil.CLI do
       IO.puts rslt
       System.halt(:abort)
     end
-    {rslt, switches, log_file_name}
+    {rslt, ip_to_ping, switches, log_file_name}
   end
   
 end

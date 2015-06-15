@@ -28,7 +28,7 @@ All values supplied with optional switches should be non-negative integers.
 
 ##Using Quoil
 
-The simplest way to use `quoil` is to download the file [**quoil**](./quoil) in the same directory as this **README.md** file.  This file has been compiled by Erlang's *escript* utility from the Elixir source in this repository.
+The simplest way to use `quoil` is to [download](https://github.com/rawdamedia/quoil/blob/master/quoil?raw=true "Direct download of the precompiled `quoil` utility") the file [**quoil**](./quoil) in the same directory as this **README.md** file.  This file has been compiled by Erlang's *escript* utility from the Elixir source in this repository.
 
 Assuming the prerequisites are met (see below), it can be launched from the command line as listed above with any desired options.
 

@@ -15,9 +15,9 @@ use Mix.Config
 #       format: "$date $time [$level] $metadata$message\n",
 #       metadata: [:user_id]
 config :quoil, 
-          default_interval: 3,
-          default_number:   20,
-          wait_period:      60
+          interval_between_pings_sec: 3,
+          number_of_pings:            20,
+          wait_period_min:            60
 
 # It is also possible to import configuration files, relative to this
 # directory. For example, you can emulate configuration per environment

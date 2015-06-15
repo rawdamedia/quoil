@@ -14,6 +14,7 @@ defmodule Quoil.CLI do
     |> run_ping
     |> Quoil.ParseResults.parse_result
     |> Quoil.LogResults.write_log
+    |> Quoil.Repeat.requested?
 
   end
 

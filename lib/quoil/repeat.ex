@@ -1,7 +1,7 @@
 defmodule Quoil.Repeat do
   def requested? ({ip_pinged, switches, log_file_name}) do
     {nr,switches} = Map.pop(switches, :repeat, nil)
-    if nr > 0 do
+    if nr != nil && nr > 0 do
       repeat_pings({nr, switches[:wait], {ip_pinged, switches, log_file_name}})
     end
   end

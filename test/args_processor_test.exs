@@ -10,6 +10,10 @@ defmodule ArgsProcessorTest do
 
   @default_switches %{interval: @default_interval, number: @default_number, repeat: nil, wait: @default_wait}
 
+  test "calling quoil without command line options returns :help" do
+    assert parse_args([]) == :help
+  end
+
   test ":help returned by option parsing with -h and --help options" do
     assert parse_args(["-h", "anything"]) == :help
     assert parse_args(["--help", "anything"]) == :help

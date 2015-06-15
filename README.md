@@ -1,7 +1,7 @@
 QuOIL
 =====
 
-QuOIL checks the quality of the internet link by logging the ping statistics to a specified server at defined intervals.  The results are saved to a file, that can then be analysed by other programs.
+QuOIL checks the quality of the internet link by logging the ping statistics to a specified server at defined intervals.  The results can be saved to a file, that can then be analysed by other programs.
 
 The usage is as follows:
 
@@ -25,3 +25,15 @@ The usage is as follows:
     If *log_file_name* is specified as an absolute or relative path, and it does not exist, then it will be created as a tab-delimited log file, with the first row as headers for the subsequent data.  If the file does exist, then the data will be appended to the end.
 
 All values supplied with optional switches should be non-negative integers.
+
+##Using Quoil
+
+The simplest way to use `quoil` is to download the file **quoil** in the same directory as this **README.md** file.  This file has been compiled by Erlang's *escript* utility from the Elixir source in this repository.
+
+Assuming the prerequisites are met (see below), it can be launched from the command line as listed above with any desired options.
+
+###Requirements for running `quoil` from the command line
+- running a Unix-like operating system
+- [Erlang](http://www.erlang.org "Erlang Homepage") is installed
+- [*ping*](http://linux.die.net/man/8/ping "ping man page") system utility installed
+- *quoil* file has appropriate execute permissions set

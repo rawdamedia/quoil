@@ -44,6 +44,9 @@ defmodule Quoil.ArgsProcessor do
   def process_switches(true, _, _) do
     :help
   end
+  def process_switches(nil, %{}, []) do
+    :help
+  end
   def process_switches(nil, switches, [ip_to_ping | log_file_name]) do
     # in the future can implement logging to multiple destinations
     switches = Map.put_new(switches, :interval, @default_interval)

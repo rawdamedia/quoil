@@ -5,6 +5,7 @@ defmodule Quoil.Mixfile do
     [app: :quoil,
      version: "0.3.2",
      elixir: "~> 1.0",
+     test_coverage: [tool: Coverex.Task],
      escript: escript_config,
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
@@ -28,7 +29,9 @@ defmodule Quoil.Mixfile do
   #
   # Type `mix help deps` for more examples and options
   defp deps do
-    []
+    [
+      {:coverex, "~> 1.3.0"}
+    ]
   end
 
   defp escript_config do

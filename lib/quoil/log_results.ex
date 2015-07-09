@@ -11,10 +11,10 @@ defmodule Quoil.LogResults do
     # Return a function that will output appropriately formatted text to the screen
     fn (data) ->
       IO.puts "\nPING statistics from #{get_timestamp()}"
-      IO.puts "========================================\n"
+      IO.puts "========================================"
       IO.puts "The target was: #{data.targetURL} (#{data.targetIP})."
       IO.puts "packets sent = #{data.sent} -> received = #{data.received} => #{data.loss}% lost."
-      IO.puts "round-trip statistics: avg = #{data.avg}ms; stddev = #{data.stddev}ms; range = #{data.min}-#{data.max}ms"
+      IO.puts "round-trip statistics: avg = #{data.avg}ms; stddev = #{data.stddev}ms; range = #{data.min}-#{data.max}ms\n"
     end
   end
 

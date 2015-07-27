@@ -35,7 +35,7 @@ defmodule Quoil.ArgsProcessor do
   end
 
 
-  @doc"""
+  @doc """
   Makes sure that if --help|-h is included anywhere then all other options are ignored and help is printed.  
   Returns a data tuple of `{*ip_to_ping*, *switches*, *log_file_name*}` where:  
   - *ip_to_ping* is a String of either the URL or IP to be supplied to the `ping` command.

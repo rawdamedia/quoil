@@ -3,7 +3,7 @@ defmodule Quoil.Mixfile do
 
   def project do
     [app: :quoil,
-     version: "0.4.0",
+     version: "0.4.1",
      elixir: "~> 1.0",
      test_coverage: [tool: Coverex.Task],
      escript: escript_config,

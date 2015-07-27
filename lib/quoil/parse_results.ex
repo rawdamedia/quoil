@@ -1,6 +1,6 @@
 defmodule Quoil.ParseResults do
   
-    def parse_result({rslt, ip_pinged, switches, log_file_name}) do
+  def parse_result({rslt, ip_pinged, switches, log_file_name}) do
     regexes = %{
       targetURL: ~r{\APING\s(.*)\s}r,
       targetIP:  ~r{\s[(](.*)[)]}r,

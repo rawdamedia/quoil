@@ -1,7 +1,7 @@
-defmodule CliTest do
+defmodule PingTest do
   use ExUnit.Case
 
-  import Quoil.CLI
+  import Quoil.Ping
   import Quoil.ArgsProcessor, only: [parse_args: 1]
 
   @tag timeout: 10000000

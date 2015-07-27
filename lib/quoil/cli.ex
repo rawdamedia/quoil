@@ -21,14 +21,7 @@ defmodule Quoil.CLI do
 
 
   def terminate_early?(:help) do
-    IO.puts """
-    usage: quoil [-h | --help]
-    quoil [--interval sec] [--number nr] [--repeat nr [--wait min]] <ip_to_ping> [log_file_name]
-    
-    all values supplied must be positive integers
-
-    For more information see: https://github.com/rawdamedia/quoil
-    """
+    IO.puts Application.get_env(:quoil, :help_message)
     System.halt(0)
   end
   def terminate_early?(:error) do

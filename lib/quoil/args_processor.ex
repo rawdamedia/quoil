@@ -9,6 +9,7 @@ defmodule Quoil.ArgsProcessor do
   - *\-\-number* or *-n* to set the number of pings in each run  
   - *\-\-repeat* or *-r* to repeat an additional specified number of times (defaults to *nil*)  
   - *\-\-wait* or *-w* to set the number of minutes before repeating (ignored unless *\-\-repeat* also specified)  
+  - *\-\-system* or *-s* uses the system `ping` utility rather than the Erlang/Elixir functionality  
   Need to specify the *ip_to_ping* as an IP address or URL.  
   If *log_file_name* is not specified, it defaults to *:std_out*  
 
@@ -23,8 +24,8 @@ defmodule Quoil.ArgsProcessor do
   def parse_args(argv) do
     # IO.puts argv
     parse = OptionParser.parse(argv,
-      strict: [help: :boolean, interval: :integer, number: :integer, repeat: :integer, wait: :integer],
-      aliases:  [h: :help, i: :interval, n: :number, r: :repeat, w: :wait])
+      strict: [help: :boolean, interval: :integer, number: :integer, repeat: :integer, wait: :integer, system: :boolean],
+      aliases:  [h: :help, i: :interval, n: :number, r: :repeat, w: :wait, s: :system])
     # Logger.info "Parsed arguments: #{Kernel.inspect(parse)}"
     case parse do
       { _, _, errors} when errors != [] -> :help

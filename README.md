@@ -15,9 +15,11 @@ The usage is as follows:
 
 * *\-\-number nr* sets the number of pings in each set used to generate the ping statistics.  If it is not specified, it defaults to *:number_of_pings* specified in [**config/config.exs**](config/config.exs) (*\-\-number* can be shortened to *-n*).
 
-* *\-\-repeat nr* sets the number of times that the ping sets are to be repeated.  If it is not specified, it defaults to *nil* (*\-\-repeat* can be shortened to *-r*)
+* *\-\-repeat nr* sets the number of times that the ping sets are to be repeated.  If it is not specified, it defaults to *nil*, which means that quoil will run only one set of pings as per the options above (*\-\-repeat* can be shortened to *-r*)
 
 * *\-\-wait min* sets the number of minutes before repeating each set of pings (ignored unless *\-\-repeat* also specified).  If it is is not specified, it defaults to *:wait_period_min* specified in [**config/config.exs**](config/config.exs) (*\-\-wait* can also be shortened to *-w*).
+
+* *\-\-system* causes quoil to use the system `ping` utility rather than Erlang/Elixir functionality.
 
 * *ip_to_ping* can also be a URL that resolves to a valid IP.
 

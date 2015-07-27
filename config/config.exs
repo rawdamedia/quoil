@@ -14,10 +14,21 @@ use Mix.Config
 #       level: :info,
 #       format: "$date $time [$level] $metadata$message\n",
 #       metadata: [:user_id]
+help_message = """
+    usage: 
+    quoil [-h | --help]
+    quoil [--interval sec] [--number nr] [--repeat nr [--wait min]] [--system] <ip_to_ping> [log_file_name]
+    
+    all values supplied must be positive integers
+
+    For more information see: https://github.com/rawdamedia/quoil
+    """
+
 config :quoil, 
           interval_between_pings_sec: 3,
           number_of_pings:            20,
-          wait_period_min:            60
+          wait_period_min:            60,
+          help_message:               help_message
 
 # It is also possible to import configuration files, relative to this
 # directory. For example, you can emulate configuration per environment

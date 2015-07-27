@@ -3,7 +3,7 @@ defmodule Quoil.Mixfile do
 
   def project do
     [app: :quoil,
-     version: "0.3.2",
+     version: "0.4.0",
      elixir: "~> 1.0",
      test_coverage: [tool: Coverex.Task],
      escript: escript_config,
@@ -30,7 +30,8 @@ defmodule Quoil.Mixfile do
   # Type `mix help deps` for more examples and options
   defp deps do
     [
-      {:coverex, "~> 1.3.0"}
+      {:coverex, "~> 1.3.0"},
+      {:gen_icmp, github: "msantos/gen_icmp"}
     ]
   end
 

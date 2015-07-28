@@ -10,6 +10,6 @@ defmodule Quoil.Repeat do
   def repeat_pings({nr, rpt_interval, args}) do
     Stream.interval(rpt_interval * 60 * 1000)
     |> Stream.take(nr)
-    |> Enum.map(fn _ -> Quoil.CLI.run_ping(args)|>Quoil.ParseResults.parse_result|>Quoil.LogResults.write_log end)
+    |> Enum.map(fn _ -> Quoil.Ping.run_ping(args)|>Quoil.ParseResults.parse_result|>Quoil.LogResults.write_log end)
   end
 end

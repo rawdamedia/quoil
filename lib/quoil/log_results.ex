@@ -39,7 +39,7 @@ defmodule Quoil.LogResults do
         end)
       end
       #write the subsequent row of data
-      data_line = "\"#{get_timestamp()}\"\t\"#{data.targetURL}\"\t\"#{data.targetIP}\"\t\"#{data.sent}\"\t\"#{data.received}\"\t\"#{data.loss}\"\t\"#{get(data,:min,"NA")}\"\t\"#{get(data,:avg,"NA")}\"\t\"#{get(data,:max,"NA")}\"\t\"#{get(data,:stddev,"NA")}\"\t\"#{data.result}\"\t\"#{data.message}\""
+      data_line = "\"#{get_timestamp()}\"\t\"#{data.targetURL}\"\t\"#{data.targetIP}\"\t\"#{data.sent}\"\t\"#{data.received}\"\t\"#{data.loss}\"\t\"#{get(data,:min,"NA")}\"\t\"#{get(data,:avg,"NA")}\"\t\"#{get(data,:max,"NA")}\"\t\"#{get(data,:stddev,"NA")}\"\t\"#{data.result}\"\t\"#{get(data,:message,"")}\""
       File.open(log_file_name, [:append, :utf8], fn(file) ->
           IO.puts(file, data_line)
       end)

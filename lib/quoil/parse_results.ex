@@ -16,8 +16,8 @@ defmodule Quoil.ParseResults do
       targetURL: ~r{\APING\s(.*)\s}r,
       targetIP:  ~r{\s[(](.*)[)]}r,
       sent:      ~r{\b(\d+) packets transmitted\b}r,
-      received:  ~r{\b(\d+) packets received\b}r,
-      loss:      ~r{\b(\d+[.]\d+)[%] packet loss\b}r
+      received:  ~r{\b(\d+) (?:packets )?received\b}r,
+      loss:      ~r{\b(\d+[.]?\d*)[%] packet loss\b}r
     }
 
     parsed_rslt = Enum.reduce(regexes, %{}, fn({key,val}, rslt_map) -> put(rslt_map, key, (Regex.run(val, rslt) |> List.last))  end)

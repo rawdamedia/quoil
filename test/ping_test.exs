@@ -19,8 +19,11 @@ defmodule PingTest do
     {:ok, socket} = :gen_icmp.open()
     IO.puts inspect(socket)
     response = :gen_icmp.ping(socket,['www.google.com.au', 'telstra.com.au'],[])
-    IO.puts inspect(response)
-    assert true
+    IO.puts "["
+    Enum.each(response, &(IO.puts inspect(&1)))
+    IO.puts "]"
+    assert Enum.all?(response, &(elem(&1,0) == :ok))
+    :gen_icmp.close(socket)
   end
 
 end

@@ -4,11 +4,7 @@ defmodule ArgsProcessorTest do
   import Quoil.ArgsProcessor, only: [parse_args: 1]
   import Map
 
-  @default_interval Application.get_env(:quoil, :interval_between_pings_sec)
-  @default_number   Application.get_env(:quoil, :number_of_pings)
-  @default_wait     Application.get_env(:quoil, :wait_period_min)
-
-  @default_switches %{interval: @default_interval, number: @default_number, repeat: nil, wait: @default_wait}
+  @default_switches Application.get_env(:quoil, :default_switches)
 
   test "calling quoil without command line options returns :help" do
     assert parse_args([]) == :help

@@ -33,12 +33,18 @@ exit_codes = %{
   77 => "You did not have sufficient permission to perform the operation."
 }
 
+default_switches = %{
+  :interval => 3,
+  :number => 20,
+  :wait => 60,
+  :repeat => nil,
+  :system => true
+}
+
 config :quoil, 
-          interval_between_pings_sec: 3,
-          number_of_pings:            20,
-          wait_period_min:            60,
           help_message:               help_message,
-          exit_codes:                 exit_codes
+          exit_codes:                 exit_codes,
+          default_switches:           default_switches
 
 # It is also possible to import configuration files, relative to this
 # directory. For example, you can emulate configuration per environment

@@ -16,10 +16,7 @@ defmodule Quoil.ArgsProcessor do
   Return a tuple of `{ip_to_ping, %{switches}, log_file_name}`, or `:help` if help was requested or error in supplied switches.
   """
 
-  @default_interval Application.get_env(:quoil, :interval_between_pings_sec)
-  @default_number Application.get_env(:quoil, :number_of_pings)
-  @default_wait Application.get_env(:quoil, :wait_period_min)
-
+  @default_switches Application.get_env(:quoil, :default_switches)
 
   def parse_args(argv) do
     # IO.puts argv
@@ -42,21 +39,21 @@ defmodule Quoil.ArgsProcessor do
   - *switches* is a map containing all the values (default or supplied) for the options to be passed to the ping command.
   - *log_file_name* is **:std_out** or the path to the file to save the results to. 
   """
-  def process_switches(true, _, _) do
+  defp process_switches(true, _, _) do
     :help
   end
-  def process_switches(nil, %{}, []) do
+  defp process_switches(nil, %{}, []) do
     :help
   end
-  def process_switches(nil, switches, [ip_to_ping | log_file_name]) do
+  defp process_switches(nil, switches, [ip_to_ping | log_file_name]) do
     # in the future can implement logging to multiple destinations
-    switches = Map.put_new(switches, :interval, @default_interval)
-    switches = Map.put_new(switches, :number, @default_number)
-    switches = Map.put_new(switches, :wait, @default_wait)
+    switches = Map.merge(@default_switches, switches)
 
     # make sure that only positive integers are passed
     switches = Enum.reduce([:interval, :number, :repeat, :wait], switches, 
-                fn (key, map) -> Map.update(map, key, nil, fn(val)->Kernel.abs(val) end) end)
+                fn (key, map) -> Map.update(map, key, nil, 
+                  fn(val) -> if val, do: Kernel.abs(val), else: val end)
+              end)
 
     if log_file_name == [] do
       log_file_name = :std_out

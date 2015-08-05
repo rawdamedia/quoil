@@ -40,9 +40,11 @@ defmodule Quoil.ArgsProcessor do
   - *log_file_name* is **:std_out** or the path to the file to save the results to. 
   """
   defp process_switches(true, _, _) do
+    # returns :help if this was requested, regardless of other switches
     :help
   end
   defp process_switches(nil, %{}, []) do
+    # returns help if no arguments supplied to the quoil command
     :help
   end
   defp process_switches(nil, switches, [ip_to_ping | log_file_name]) do

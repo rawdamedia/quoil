@@ -9,7 +9,7 @@ The usage is as follows:
 
 * This prints a summary of the usage.
 
-`quoil [--interval sec] [--number nr] [--repeat nr [--wait min]] <ip_to_ping> [log_file_name]`
+`quoil [--interval sec] [--number nr] [--repeat nr [--wait min]] [--system] <ip_to_ping> [log_file_name]`
 
 * *\-\-interval sec* sets the number of seconds between each ping.  If it is not specified, it defaults to *:interval_between_pings_sec* specified in [**config/config.exs**](config/config.exs) (*\-\-interval* can be shortened to *-i*).
 

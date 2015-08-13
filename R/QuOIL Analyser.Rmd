@@ -1,0 +1,15 @@
+---
+title: "QuOIL Data Presenter"
+author: "Tom Rawdanowicz"
+date: "16 June 2015"
+output: pdf_document
+---
+
+```{r load_data, echo=FALSE}
+load_data <- function(file) {
+    ping_data <- read.csv(file, sep = "\t")
+    ping_data$TimeStamp <- as.POSIXlt(ping_data$TimeStamp)
+    return(ping_data)
+}
+```
+
